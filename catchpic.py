@@ -8,9 +8,9 @@ import random
 import hashlib
 import traceback
 
-#Êı¾İ¿âÅĞ¶Ï
+#æ•°æ®åº“åˆ¤æ–­
 def db(flag,path,title,value,tbname):
-    conn = MySQLdb.connect(host='qdm161153526.my3w.com',user='qdm161153526',passwd='zhangpan',db='qdm161153526_db')
+    conn = MySQLdb.connect(host='host',user='user',passwd='passwd',db='dbname')
     cursor = conn.cursor()
     sel = "select flag from " + tbname + " where flag = '"+ flag +"'" 
     cursor.execute(sel)
@@ -27,28 +27,28 @@ def db(flag,path,title,value,tbname):
     cursor.close()
     conn.colose()
     
-#»ñÈ¡ÍøÒ³ÄÚÈİ
+#è·å–ç½‘é¡µå†…å®¹
 def gethtml(url):
     html_content = urllib.urlopen(url)
     res = html_content.read()
     return res
 
-#»ñÈ¡Í¼Æ¬Á´½Ó
+#è·å–å›¾ç‰‡é“¾æ¥
 def getpic(html,reg):
     imgcom = re.compile(reg)
     imgurl = re.findall(imgcom,html)
     return imgurl
 
-#ÎÄ¼şÃû³ÆËæ»úÉú³É
+#æ–‡ä»¶åç§°éšæœºç”Ÿæˆ
 def file_name():
-    #Ê¹ÓÃÊ±¼ä´ÁÓë0µ½9999999Ëæ»úÊıÊ¹ÓÃmd5¼ÓÃÜ£¬ÓÃÓÚ¸øÉú³ÉµÄÎÄ¼şÃüÃû±ÜÃâÃû³ÆÖØ¸´
+    #ä½¿ç”¨æ—¶é—´æˆ³ä¸0åˆ°9999999éšæœºæ•°ä½¿ç”¨md5åŠ å¯†ï¼Œç”¨äºç»™ç”Ÿæˆçš„æ–‡ä»¶å‘½åé¿å…åç§°é‡å¤
     m2 = hashlib.md5()
     m2.update(str(time.time()) + str(random.randint(0,9999999)) + str(random.randint(0,9999999)))
     hashmd5 = m2.hexdigest()
     return hashmd5
 
 
-#ÏÂÔØÍ¼Æ¬
+#ä¸‹è½½å›¾ç‰‡
 def downloadpic(pic_url,path,flag,flags,title,tbname,ctype):
     path_exists = os.path.exists(path)
     if not path_exists:
@@ -79,10 +79,10 @@ def downloadpic(pic_url,path,flag,flags,title,tbname,ctype):
 
 
 
-#×Ö·û´®´¦ÀíºÍÊı¾İ¿â×Ö¶ÎÅĞ¶ÏÊÇ·ñ´æÔÚ
+#å­—ç¬¦ä¸²å¤„ç†å’Œæ•°æ®åº“å­—æ®µåˆ¤æ–­æ˜¯å¦å­˜åœ¨
 def str_deal(res,url,c_type):
     reg = r''+ url +'(\d+)'
-    #Êı¾İ¿â±íÃû    
+    #æ•°æ®åº“è¡¨å    
     tbname = 'gpic_' + c_type
     title = '000'
     num = getpic(res,reg)
@@ -97,17 +97,17 @@ def str_deal(res,url,c_type):
     downloadpic(pic_url,path,flag,flags,title,tbname,c_type)
         
 '''
-×¥È¡µØÖ·£ºhttp://www.mm131.com
-×¥È¡ÄÚÈİ£º×¥È¡'Çå´¿ÃÀÃ¼'Ö÷Ò³×îĞÂÄÚÈİ£¬×Ü¼Æ20Æª
+æŠ“å–åœ°å€ï¼šhttp://www.mm131.com
+æŠ“å–å†…å®¹ï¼šæŠ“å–'æ¸…çº¯ç¾çœ‰'ä¸»é¡µæœ€æ–°å†…å®¹ï¼Œæ€»è®¡20ç¯‡
 
 '''
 t = {'xinggan':'6','qingchun':'1','xiaohua':'2','chemo':'3','qipao':'4','mingxing':'5'}
 
 c_type = 'qingchun'
 listpage = t['qingchun']
-#Çå´¿ÃÀÃ¼Á´½Ó
+#æ¸…çº¯ç¾çœ‰é“¾æ¥
 url = 'http://www.mm131.com/' + c_type + '/'
-#»ñÈ¡Çå´¿ÃÀÃ¼Ö÷Ò³ÄÚÈİ
+#è·å–æ¸…çº¯ç¾çœ‰ä¸»é¡µå†…å®¹
 html = gethtml(url)
 reg = r'<dd><a target="_blank" href="('+url+'\d+\.html)"><img'
 
@@ -115,7 +115,7 @@ rurl = getpic(html,reg)
 for res in rurl:
     str_deal(res,url,c_type)
 
-nt = r'<a href=\'(list_'+ listpage +'_\d+\.html)\' class="page-en">ÏÂÒ»Ò³</a>'
+nt = r'<a href=\'(list_'+ listpage +'_\d+\.html)\' class="page-en">ä¸‹ä¸€é¡µ</a>'
 nt_num = getpic(html,nt)
 while 1:
 
@@ -123,7 +123,7 @@ while 1:
         nt_url = url + nt_num[0]
         nt_html = gethtml(nt_url)
 
-        #Æ¥ÅäÇå´¿ÃÀÃ¼Ö÷Ò³µÚÒ»Ò³ÄÚÈİÍ¼Æ¬Õ¹Ê¾µÄÁ´½Ó
+        #åŒ¹é…æ¸…çº¯ç¾çœ‰ä¸»é¡µç¬¬ä¸€é¡µå†…å®¹å›¾ç‰‡å±•ç¤ºçš„é“¾æ¥
         rurl = getpic(nt_html,reg)
         for h_url in rurl:
             str_deal(h_url,url,c_type)
@@ -132,5 +132,5 @@ while 1:
         nt_url = url + nt_num[0]
         nt_html = gethtml(nt_url)
     except Exception,e:
-#Èç¹ûÔ½½çÁË¾ÍÍË³ö
+#å¦‚æœè¶Šç•Œäº†å°±é€€å‡º
         break
